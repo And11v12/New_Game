@@ -4,12 +4,16 @@ import time
 from pygame.locals import (
     K_ESCAPE,
     KEYDOWN,
-    QUIT
+    QUIT,
+    K_DOWN,
+    K_LEFT,
+    K_RIGHT,
+    K_UP
 )
 pygame.mixer.init()
 pygame.init()
 SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 700
+SCREEN_HEIGHT = 600
 FPS = 60
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
@@ -19,11 +23,28 @@ ADD_ENEMY = pygame.USEREVENT + 1
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
-        self.image = pygame.image.load('3.png')
-        self.image = pygame.transform.scale(self.image, (7, 8))
-        #self.standard_image = pygame.transform.scale(self.image, (60, 25))
-        #self.image.set_colorkey((255, 255, 255))
+        self.surface = pygame.Surface((20, 20))
+        self.col = (100, 100, 100)
         self.rect = self.image.get_rect()
+        self.surface.fill(self.col)
+    def update(self)
+        keyUpdate = pygame.key.get_pressed()
+        if keyUpdate == K_DOWN:
+            self.rect.move_ip(0, 5)
+        if keyUpdate == K_UP:
+            self.rect.move_ip(0, -5)
+        if keyUpdate == K_LEFT:
+            self.rect.move_ip(0, 5)
+        if keyUpdate == K_RIGHT:
+            self.rect.move_ip(0, -5)
+        if self.rect.right > SCREEN_WIDTH:
+            self.rect.right = SCREEN_WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.top > SCREEN_HEIGHT:
+            self.rect.top = SCREEN_HEIGHT
+        if self.rect.bottom < 0:
+            self.rect.bottom = 0
 
 
 class Game():
@@ -39,5 +60,5 @@ run = True
 while run:
     clock.tick(FPS)
     game.update()
-    screen.fill((0, 0, 0))
+    screen.fill((0, 0, 40))
     pygame.display.flip()
