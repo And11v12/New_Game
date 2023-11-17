@@ -20,13 +20,13 @@ clock = pygame.time.Clock()
 ADD_ENEMY = pygame.USEREVENT + 1
 
 
-class Player():
+class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
-        self.surface = pygame.Surface((20, 20))
+        self.image = pygame.Surface((20, 20))
         self.col = (100, 100, 100)
-        self.rect = self.surface.get_rect()
-        self.surface.fill(self.col)
+        self.rect = self.image.get_rect()
+        self.image.fill(self.col)
         self.rect.x = 50
         self.rect.y = 50
 
@@ -44,10 +44,29 @@ class Player():
             self.rect.right = SCREEN_WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
-        if self.rect.top > SCREEN_HEIGHT:
-            self.rect.top = SCREEN_HEIGHT
-        if self.rect.bottom < 0:
-            self.rect.bottom = 0
+        if self.rect.bottom > SCREEN_HEIGHT:
+            self.rect.bottom = SCREEN_HEIGHT
+        if self.rect.top < 0:
+            self.rect.top = 0
+
+
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Enemy, self).__init__()
+        self.image = pygame.Surface((20, 20))
+        self.col = (10, 10, 10)
+        self.image.fill(self.col)
+        self.rect = self.image.get_rect()
+        self.rect.x = SCREEN_WIDTH
+        self.rect.y = random.randint(0, SCREEN_HEIGHT)
+        self.speed = 7
+
+    def update(self):
+        self.rect.x -= self.speed
+        if self.rect.left < 0:
+            self.kill()
+
+
 
 
 class Game():
@@ -56,11 +75,12 @@ class Game():
         self.player = Player()
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)
+
     def update(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                self.all_sprites.update()
+        self.all_sprites.update()
         for e in self.all_sprites:
             self.screen.blit(e.image, e.rect)
 
@@ -68,6 +88,6 @@ game = Game(screen)
 run = True
 while run:
     clock.tick(FPS)
-    game.update()
     screen.fill((0, 0, 40))
+    game.update()
     pygame.display.flip()
