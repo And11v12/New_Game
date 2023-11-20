@@ -70,21 +70,29 @@ class Enemy(pygame.sprite.Sprite):
 
 
 class Game():
-    def __init__(self, screen):
+    def __init__(self, screen, ADD_ENEMY):
         self.screen = screen
         self.player = Player()
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)
+        self.ADD_ENEMY = ADD_ENEMY
+        enemies = pygame.sprite.Group()
+
 
     def update(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+            elif event.type == ADD_ENEMY:
+                enemy = Enemy()
+                all_sprites.add(enemy)
+                enemies.add(enemy)
+                enemy.update()
         self.all_sprites.update()
         for e in self.all_sprites:
             self.screen.blit(e.image, e.rect)
 
-game = Game(screen)
+game = Game(screen, ADD_ENEMY)
 run = True
 while run:
     clock.tick(FPS)
