@@ -1,19 +1,15 @@
+import random
 import sys
 
 import pygame
-import random
-import time
-import sys
 from pygame.locals import (
     K_SPACE,
-    K_ESCAPE,
-    KEYDOWN,
-    QUIT,
     K_DOWN,
     K_LEFT,
     K_RIGHT,
     K_UP
 )
+
 pygame.mixer.init()
 pygame.init()
 SCREEN_WIDTH = 800
@@ -37,8 +33,7 @@ class Player(pygame.sprite.Sprite):
         self.bullets = bullets
         self.all_sprites = all_sprites
         self.get_ticks = pygame.time.get_ticks()
-        self.speed = 4
-
+        self.shot_speed = 250
 
     def update(self):
         keyUpdate = pygame.key.get_pressed()
@@ -63,11 +58,12 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         self.now = pygame.time.get_ticks()
-        if self.now - self.get_ticks > self.speed:
+        if self.now - self.get_ticks > self.shot_speed:
             self.get_ticks = self.now
             bullet = Bullet(self.rect.x, self.rect.y)
             self.all_sprites.add(bullet)
             self.bullets.add(bullet)
+
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -85,9 +81,10 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.kill()
 
+
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, posX, posY, *groups: _Group):
-        super().__init__(*groups)
+    def __init__(self, posX, posY):
+        super(Bullet, self).__init__()
         self.image = pygame.Surface((10, 10))
         self.col = (120, 20, 20)
         self.image.fill(self.col)
@@ -96,12 +93,11 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x = posX
         self.rect.y = posY
 
-
-
     def update(self):
-        self.rect.X += 5
+        self.rect.x += self.speed
         if self.rect.right < 0:
             self.kill()
+
 
 class Game():
     def __init__(self, screen, ADD_ENEMY):
@@ -112,7 +108,6 @@ class Game():
         self.bullets = pygame.sprite.Group()
         self.player = Player(self.all_sprites, self.bullets)
         self.all_sprites.add(self.player)
-
 
     def update(self):
         for event in pygame.event.get():
