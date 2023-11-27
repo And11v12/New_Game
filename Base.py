@@ -10,6 +10,9 @@ from pygame.locals import (
     K_UP
 )
 
+def draw_text(text, shrift, color_text, posX, posY, screen):
+    text_render = shrift.render(text, True, color_text)
+    screen.blit(text_render, (posX, posY))
 pygame.mixer.init()
 pygame.init()
 SCREEN_WIDTH = 800
@@ -108,6 +111,7 @@ class Game():
         self.bullets = pygame.sprite.Group()
         self.player = Player(self.all_sprites, self.bullets)
         self.all_sprites.add(self.player)
+        self.shrift = pygame.font.Font(None, 36)
 
     def update(self):
         for event in pygame.event.get():
@@ -118,6 +122,12 @@ class Game():
                 enemy = Enemy()
                 self.all_sprites.add(enemy)
                 self.enemies.add(enemy)
+        self.collide = pygame.sprite.groupcollide(self.enemies, self.bullets, True, True)
+        for x in self.collide:
+            enemy = Enemy()
+            self.all_sprites.add(enemy)
+            self.enemies.add(enemy)
+        draw_text('StS', self.shrift, (200, 200, 200), SCREEN_HEIGHT - 590, SCREEN_WIDTH - 790, self.screen)
         self.enemies.update()
         self.all_sprites.update()
         self.bullets.update()
@@ -127,6 +137,7 @@ class Game():
             self.player.kill()
             pygame.quit()
             sys.exit()
+
 
 
 run = True
