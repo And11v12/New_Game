@@ -11,7 +11,7 @@ from pygame.locals import (
 )
 
 def draw_text(text, shrift, color_text, posX, posY, screen):
-    text_render = shrift.render(text, True, color_text)
+    text_render = shrift.render(str(text), True, color_text)
     screen.blit(text_render, (posX, posY))
 pygame.mixer.init()
 pygame.init()
@@ -112,6 +112,7 @@ class Game():
         self.player = Player(self.all_sprites, self.bullets)
         self.all_sprites.add(self.player)
         self.shrift = pygame.font.Font(None, 36)
+        self.score = 0
 
     def update(self):
         for event in pygame.event.get():
@@ -123,11 +124,14 @@ class Game():
                 self.all_sprites.add(enemy)
                 self.enemies.add(enemy)
         self.collide = pygame.sprite.groupcollide(self.enemies, self.bullets, True, True)
+        if self.collide:
+            self.score += 1
         for x in self.collide:
             enemy = Enemy()
             self.all_sprites.add(enemy)
             self.enemies.add(enemy)
         draw_text('StS', self.shrift, (200, 200, 200), SCREEN_HEIGHT - 590, SCREEN_WIDTH - 790, self.screen)
+        draw_text("Score: " + str(self.score), self.shrift, (200, 200, 200), SCREEN_HEIGHT + 60, SCREEN_WIDTH - 250, self.screen)
         self.enemies.update()
         self.all_sprites.update()
         self.bullets.update()
