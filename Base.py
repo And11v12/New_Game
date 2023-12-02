@@ -36,7 +36,7 @@ class Player(pygame.sprite.Sprite):
         self.bullets = bullets
         self.all_sprites = all_sprites
         self.get_ticks = pygame.time.get_ticks()
-        self.shot_speed = 250
+        self.shot_speed = 25
 
     def update(self):
         keyUpdate = pygame.key.get_pressed()
