@@ -36,7 +36,12 @@ class Player(pygame.sprite.Sprite):
         self.bullets = bullets
         self.all_sprites = all_sprites
         self.get_ticks = pygame.time.get_ticks()
+<<<<<<< Updated upstream
         self.shot_speed = 25
+=======
+        self.shoot_speed = 400
+
+>>>>>>> Stashed changes
 
     def update(self):
         keyUpdate = pygame.key.get_pressed()
@@ -61,7 +66,11 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         self.now = pygame.time.get_ticks()
+<<<<<<< Updated upstream
         if self.now - self.get_ticks > self.shot_speed:
+=======
+        if self.now - self.get_ticks > self.shoot_speed:
+>>>>>>> Stashed changes
             self.get_ticks = self.now
             bullet = Bullet(self.rect.x, self.rect.y)
             self.all_sprites.add(bullet)
@@ -77,10 +86,9 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = SCREEN_WIDTH
         self.rect.y = random.randint(0, SCREEN_HEIGHT)
-        self.speed = 4
 
     def update(self):
-        self.rect.x -= self.speed
+        self.rect.x -= self.shoot_speed
         if self.rect.left < 0:
             self.kill()
 
@@ -92,12 +100,16 @@ class Bullet(pygame.sprite.Sprite):
         self.col = (120, 20, 20)
         self.image.fill(self.col)
         self.rect = self.image.get_rect()
-        self.speed = 4
+        self.shoot_speed = 4
         self.rect.x = posX
         self.rect.y = posY
 
     def update(self):
+<<<<<<< Updated upstream
         self.rect.x += self.speed
+=======
+        self.rect.x += self.shoot_speed
+>>>>>>> Stashed changes
         if self.rect.right < 0:
             self.kill()
 
