@@ -1,5 +1,6 @@
 import pygame
 import sys
+from leaderboard import Leaderboard
 from pygame.locals import (
     K_SPACE
 )
@@ -22,6 +23,8 @@ class Game():
         self.score = 0
         self.state = 'main_menu'
         self.new_game = True
+        self.player_name = ''
+        self.leaderboard = Leaderboard(self.screen)
     def game(self):
         self.collide = pygame.sprite.groupcollide(self.enemies, self.bullets, True, True)
         if self.collide:
@@ -41,10 +44,15 @@ class Game():
             self.player.kill()
             self.state = 'game_over'
             self.new_game = True
+            self.leaderboard.insert_update(self.player_name, self.score)
     def main_menu(self):
             draw_text('Safe Your Soul(SYS)', self.shrift, (200, 200, 200), SCREEN_HEIGHT - 600, SCREEN_WIDTH - 800, self.screen)
+            draw_text("Введите имя", self.shrift, (255, 255, 255), 50, 100, self.screen)
+            draw_text(self.player_name, self.shrift, (255, 255, 255), 230,  100, self.screen)
+
             draw_text('Вверх, вниз, влево, вправо - стрелки. Пробел - стрелять', self.shrift, (200, 200, 200), SCREEN_HEIGHT - 550, SCREEN_WIDTH - 600, self.screen)
             draw_text('Таблица рекордов:', self.shrift, (200, 200, 200), SCREEN_HEIGHT - 600, SCREEN_WIDTH - 770, self.screen)
+            self.leaderboard.print()
     def game_over(self):
         draw_text('Game Over...', self.shrift, (200, 200, 200), SCREEN_HEIGHT - 300, SCREEN_WIDTH - 600, self.screen)
         draw_text('Нажмите на пробел, чобы выйти в главное меню', self.shrift, (200, 200, 200), SCREEN_HEIGHT - 500, SCREEN_WIDTH - 550, self.screen)
@@ -57,10 +65,15 @@ class Game():
                 enemy = Enemy()
                 self.all_sprites.add(enemy)
                 self.enemies.add(enemy)
-            elif event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN and len(self.player_name) >= 2:
                 if self.state == 'main_menu':
                     if event.key == pygame.K_SPACE:
                         self.state = 'game'
+                    elif event.key == pygame.K_BACKSPACE:
+                        self.player_name = self.player_name[:-1]
+                    else:
+                        if len(self.player_name) < 10 and event.key != pygame.K_SPACE:
+                            self.player_name += event.unicode
                 elif self.state == 'game_over':
                     if event.key == pygame.K_SPACE:
                         self.state = 'main_menu'
