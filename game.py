@@ -13,6 +13,8 @@ from enemy import Enemy
 class Game():
     def __init__(self, screen, ADD_ENEMY):
         self.screen = screen
+        self.image = pygame.image.load('sss.png')
+        self.image = pygame.transform.scale(self.image, (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.all_sprites = pygame.sprite.Group()
         self.ADD_ENEMY = ADD_ENEMY
         self.enemies = pygame.sprite.Group()
@@ -65,9 +67,9 @@ class Game():
                 enemy = Enemy()
                 self.all_sprites.add(enemy)
                 self.enemies.add(enemy)
-            elif event.type == pygame.KEYDOWN and len(self.player_name) >= 2:
+            elif event.type == pygame.KEYDOWN:
                 if self.state == 'main_menu':
-                    if event.key == pygame.K_SPACE:
+                    if event.key == pygame.K_SPACE and len(self.player_name) >= 2:
                         self.state = 'game'
                     elif event.key == pygame.K_BACKSPACE:
                         self.player_name = self.player_name[:-1]

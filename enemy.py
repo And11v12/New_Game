@@ -7,9 +7,10 @@ from settings import SCREEN_HEIGHT, SCREEN_WIDTH
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super(Enemy, self).__init__()
-        self.image = pygame.Surface((20, 20))
         self.col = (200, 200, 200)
-        self.image.fill(self.col)
+        self.image = pygame.image.load('213.png')
+        self.image.set_colorkey((0, 0, 0))
+        self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()
         self.rect.x = SCREEN_WIDTH
         self.rect.y = random.randint(0, SCREEN_HEIGHT)
