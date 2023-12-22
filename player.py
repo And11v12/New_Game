@@ -11,7 +11,7 @@ from settings import SCREEN_HEIGHT, SCREEN_WIDTH
 class Player(pygame.sprite.Sprite):
     def __init__(self, all_sprites, bullets):
         super(Player, self).__init__()
-        self.image = pygame.image.load('3.png')
+        self.image = pygame.image.load('111.jpg')
         self.image.set_colorkey((0, 0, 0))
         self.image = pygame.transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()

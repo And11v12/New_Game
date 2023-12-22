@@ -26,6 +26,10 @@ class Game():
         self.state = 'main_menu'
         self.new_game = True
         self.player_name = ''
+        self.change_state_sound = pygame.mixer.Sound("музыка фон.flac")
+        self.player_death_sound = pygame.mixer.Sound("звук выстрела.mp3")
+        self.enemy_death_sound = pygame.mixer.Sound("350972__cabled_mess__boom_c_08.wav")
+        self.change_state_sound.set_volume(50)
         self.leaderboard = Leaderboard(self.screen)
     def game(self):
         self.collide = pygame.sprite.groupcollide(self.enemies, self.bullets, True, True)
@@ -70,13 +74,17 @@ class Game():
             elif event.type == pygame.KEYDOWN:
                 if self.state == 'main_menu':
                     if event.key == pygame.K_SPACE and len(self.player_name) >= 2:
+                        self.change_state_sound.play()
                         self.state = 'game'
+                        self.change_state_sound.stop()
                     elif event.key == pygame.K_BACKSPACE:
                         self.player_name = self.player_name[:-1]
                     else:
                         if len(self.player_name) < 10 and event.key != pygame.K_SPACE:
                             self.player_name += event.unicode
                 elif self.state == 'game_over':
+                    self.player_death_sound.play()
+                    self.player_death_sound.stop()
                     if event.key == pygame.K_SPACE:
                         self.state = 'main_menu'
         if self.state == 'main_menu':
